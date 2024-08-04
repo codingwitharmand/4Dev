@@ -3,6 +3,7 @@ name: Build Pipeline
 on:
   push:
     branches:
+      - develop
       - 'feature/*'
       - 'fix/*'
   pull_request:
