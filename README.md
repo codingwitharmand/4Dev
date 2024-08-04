@@ -1,2 +1,2 @@
-# 4dev
-4Dev a social network for developers
+# 4Devs
+4Devs a social network for developers
