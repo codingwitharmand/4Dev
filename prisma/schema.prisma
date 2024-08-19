@@ -1,0 +1,155 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int               @id @default(autoincrement())
+  email           String            @unique
+  username        String            @unique
+  password        String?
+  profile         Profile?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  posts           Post[]
+  comments        Comment[]
+  projects        Project[]
+  collaborations  Collaboration[]
+  badges          Badge[]
+  certificates    Certificate[]
+  groupMembership GroupMembership[]
+  Like            Like[]
+  Group           Group[]
+  Notification    Notification[]
+}
+
+model Profile {
+  id             Int     @id @default(autoincrement())
+  userId         Int     @unique
+  user           User    @relation(fields: [userId], references: [id])
+  bio            String?
+  profilePicture String?
+  githubUrl      String?
+  linkedinUrl    String?
+  portfolioUrl   String?
+  skills         Skill[]
+}
+
+model Skill {
+  id        Int      @id @default(autoincrement())
+  name      String
+  profile   Profile? @relation(fields: [profileId], references: [id])
+  profileId Int?
+}
+
+model Post {
+  id        Int       @id @default(autoincrement())
+  content   String
+  imageUrl  String?
+  codeBlock String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  authorId  Int
+  author    User      @relation(fields: [authorId], references: [id])
+  comments  Comment[]
+  likes     Like[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  authorId  Int
+  postId    Int
+  author    User     @relation(fields: [authorId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  userId    Int
+  postId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+}
+
+model Project {
+  id            Int             @id @default(autoincrement())
+  title         String
+  description   String
+  imageUrl      String?
+  githubUrl     String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  ownerId       Int
+  owner         User            @relation(fields: [ownerId], references: [id])
+  collaborators Collaboration[]
+}
+
+model Collaboration {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  projectId Int
+  role      String
+  user      User    @relation(fields: [userId], references: [id])
+  project   Project @relation(fields: [projectId], references: [id])
+}
+
+model Group {
+  id          Int               @id @default(autoincrement())
+  name        String
+  description String
+  imageUrl    String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  ownerId     Int
+  owner       User              @relation(fields: [ownerId], references: [id])
+  memberships GroupMembership[]
+}
+
+model GroupMembership {
+  id      Int    @id @default(autoincrement())
+  groupId Int
+  userId  Int
+  role    String
+  group   Group  @relation(fields: [groupId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  content   String
+  isRead    Boolean  @default(false)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Badge {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  awardedAt   DateTime @default(now())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model Certificate {
+  id               Int      @id @default(autoincrement())
+  title            String
+  awardedAt        DateTime @default(now())
+  userId           Int
+  user             User     @relation(fields: [userId], references: [id])
+  verificationCode String   @unique
+}
