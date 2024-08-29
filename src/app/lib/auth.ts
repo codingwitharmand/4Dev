@@ -2,13 +2,13 @@ import {PrismaAdapter} from "@next-auth/prisma-adapter";
 import EmailProvider from "next-auth/providers/email";
 import GithubProvider from "next-auth/providers/github";
 import {db} from "@/app/lib/db";
+import {NextAuthOptions} from "next-auth";
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(db),
     secret: process.env.NEXTAUTH_SECRET,
     session: {
       strategy: "jwt",
-        jwt: true,
     },
     pages: {
         signIn: '/'
