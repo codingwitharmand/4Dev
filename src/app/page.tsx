@@ -75,8 +75,7 @@ export default function Home() {
                         </button>
                         {error && <span className="text-center text-red-700 font-bold my-4">{error}</span>}
                         <div className="text-center text-sm mt-4 px-2">
-                            <i>For your safety, 4Devs don't use passwords. You will receive a connection link
-                                via email.</i>
+                            <i>For your safety, 4Devs don&apos;t use passwords. You will receive a connection link via email.</i>
                         </div>
                     </div>
                 </div>
