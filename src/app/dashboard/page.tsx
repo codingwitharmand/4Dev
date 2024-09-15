@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {signOut, useSession} from "next-auth/react"
 import {redirect} from "next/navigation";
+import ButtonDefault from "@/components/button";
 
 export default function Page() {
     const {data: session}: any = useSession();
@@ -20,10 +21,13 @@ export default function Page() {
             </div>
             <div className="flex flex-col items-center">
                 <h1>Welcome {greetName}</h1>
-                <Link className="hover:text-primary" href="#" onClick={(e) => {
+                <ButtonDefault redirect="/dashboard/profile">
+                    Settings
+                </ButtonDefault>
+                <ButtonDefault onClick={(e) => {
                     e.preventDefault();
                     signOut();
-                }}>Logout</Link>
+                }}>Logout</ButtonDefault>
             </div>
         </div>
     )
